@@ -100,6 +100,9 @@ def write_results(prediction, confidence, num_classes, nms = True, nms_conf = 0.
     conf_mask = (prediction[:,:,4] > confidence).float().unsqueeze(2)
     prediction = prediction*conf_mask
     
+    # no detected objects
+    if torch.sum(conf_mask).item() == 0:
+        return 0
 
     try:
         ind_nz = torch.nonzero(prediction[:,:,4]).transpose(0,1).contiguous()
